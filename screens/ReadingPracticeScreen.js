@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { READING_PASSAGE, READING_QUESTIONS } from '../constants';
-import { RoutePath } from '../types';
+const ReadingPracticeScreen = () => {
+  const { useState } = window.React;
+  const Layout = window.Layout;
+  const READING_PASSAGE = window.READING_PASSAGE;
+  const READING_QUESTIONS = window.READING_QUESTIONS;
+  const RoutePath = window.RoutePath;
 
-const ReadingPracticeScreen: React.FC = () => {
-  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<{[key: string]: number}>({});
+  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const question = READING_QUESTIONS[currentQuestionIndex];
 
-  const handleSelectAnswer = (index: number) => {
+  const handleSelectAnswer = (index) => {
     if (isSubmitted) return;
     setSelectedAnswers(prev => ({ ...prev, [question.id]: index }));
   };
@@ -28,8 +27,8 @@ const ReadingPracticeScreen: React.FC = () => {
         {/* Header / Breadcrumbs / Timer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 flex-shrink-0">
           <div className="flex items-center gap-2 text-sm text-gray-500">
-             <span className="hover:text-primary cursor-pointer" onClick={() => navigate(RoutePath.DASHBOARD)}>Home</span> / 
-             <span className="hover:text-primary cursor-pointer" onClick={() => navigate(RoutePath.READING_LIB)}>Reading</span> / 
+             <span className="hover:text-primary cursor-pointer" onClick={() => window.location.href = RoutePath.DASHBOARD}>Home</span> / 
+             <span className="hover:text-primary cursor-pointer" onClick={() => window.location.href = RoutePath.READING_LIB}>Reading</span> / 
              <span className="text-gray-900 font-medium">Practice Test 1</span>
           </div>
 
@@ -105,46 +104,47 @@ const ReadingPracticeScreen: React.FC = () => {
                     })}
                  </div>
 
-                 {isSubmitted && (
-                    <div className="mb-6 p-4 bg-green-50 border border-green-100 rounded-lg">
-                       <div className="flex items-center gap-2 text-success font-bold text-sm mb-2">
-                          <span className="material-symbols-outlined text-lg">check_circle</span>
-                          Explanation
-                       </div>
-                       <p className="text-sm text-gray-700">{question.explanation}</p>
-                    </div>
-                 )}
-
-                 <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between gap-3">
+                 <div className="mt-auto pt-4 border-t border-gray-100 flex gap-3">
                     <button 
-                       disabled={currentQuestionIndex === 0}
-                       onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
-                       className="flex items-center justify-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                       <span className="material-symbols-outlined text-lg mr-1">arrow_back</span> Prev
+                      onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+                      disabled={currentQuestionIndex === 0}
+                      className="flex-1 py-2 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                    >
+                      Previous
                     </button>
-
-                    {isSubmitted ? (
-                        currentQuestionIndex < READING_QUESTIONS.length - 1 ? (
-                           <button 
-                              onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                              className="flex items-center justify-center px-6 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-dark">
-                              Next <span className="material-symbols-outlined text-lg ml-1">arrow_forward</span>
-                           </button>
-                        ) : (
-                           <button 
-                              onClick={() => navigate(RoutePath.REPORT)}
-                              className="flex items-center justify-center px-6 py-2 bg-gray-900 text-white rounded-lg text-sm font-bold hover:bg-gray-800">
-                              View Report
-                           </button>
-                        )
+                    
+                    {currentQuestionIndex < READING_QUESTIONS.length - 1 ? (
+                      <button 
+                        onClick={() => setCurrentQuestionIndex(prev => Math.min(READING_QUESTIONS.length - 1, prev + 1))}
+                        className="flex-1 py-2 px-4 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-dark shadow-sm"
+                      >
+                        Next
+                      </button>
                     ) : (
-                       <button 
+                      !isSubmitted ? (
+                        <button 
                           onClick={handleSubmit}
-                          className="flex items-center justify-center px-6 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-dark">
+                          className="flex-1 py-2 px-4 bg-success text-white rounded-lg text-sm font-bold hover:bg-green-600 shadow-sm"
+                        >
                           Submit
-                       </button>
+                        </button>
+                      ) : (
+                        <button 
+                          onClick={() => window.location.href = RoutePath.REPORT}
+                          className="flex-1 py-2 px-4 bg-gray-900 text-white rounded-lg text-sm font-bold hover:bg-gray-800 shadow-sm"
+                        >
+                          View Report
+                        </button>
+                      )
                     )}
                  </div>
+                 
+                 {isSubmitted && (
+                   <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm">
+                     <p className="font-bold text-gray-900 mb-1">Explanation:</p>
+                     <p className="text-gray-600">{question.explanation}</p>
+                   </div>
+                 )}
               </div>
            </div>
         </div>
@@ -153,4 +153,4 @@ const ReadingPracticeScreen: React.FC = () => {
   );
 };
 
-export default ReadingPracticeScreen;
+window.ReadingPracticeScreen = ReadingPracticeScreen;

@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+const App = window.App;
+const React = window.React;
+const ReactDOM = window.ReactDOM;
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

@@ -1,15 +1,8 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { MOCK_USER } from '../constants';
-import { RoutePath } from '../types';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
+const Layout = ({ children }) => {
+  const location = window.location;
+  const RoutePath = window.RoutePath;
+  const MOCK_USER = window.MOCK_USER;
 
   const menuItems = [
     { label: 'Dashboard', icon: 'home', path: RoutePath.DASHBOARD },
@@ -34,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             return (
               <button
                 key={item.path}
-                onClick={() => navigate(item.path)}
+                onClick={() => window.location.href = item.path}
                 className={`flex w-full items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-primary/10 text-primary'
@@ -52,7 +45,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <div className="p-4 border-t border-gray-200">
           <button 
-             onClick={() => navigate(RoutePath.LOGIN)}
+             onClick={() => window.location.href = RoutePath.LOGIN}
              className="flex w-full items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
             <span className="material-symbols-outlined">logout</span>
             Sign Out
@@ -94,4 +87,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+window.Layout = Layout;

@@ -1,10 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { RoutePath } from '../types';
+const ReadingLibraryScreen = () => {
+  const Layout = window.Layout;
+  const RoutePath = window.RoutePath;
 
-const ReadingLibraryScreen: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <Layout>
@@ -75,7 +72,7 @@ const ReadingLibraryScreen: React.FC = () => {
                    <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Evolution</span>
                 </div>
                 <button 
-                  onClick={() => navigate(RoutePath.READING_PRACTICE)}
+                  onClick={() => window.location.href = RoutePath.READING_PRACTICE}
                   className="mt-auto w-full py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors">
                   Start Practice
                 </button>
@@ -90,7 +87,9 @@ const ReadingLibraryScreen: React.FC = () => {
                    <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">History</span>
                    <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Technology</span>
                 </div>
-                <button className="mt-auto w-full py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors">
+                <button 
+                  onClick={() => window.location.href = RoutePath.READING_PRACTICE}
+                  className="mt-auto w-full py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors">
                   Start Practice
                 </button>
              </div>
@@ -98,29 +97,23 @@ const ReadingLibraryScreen: React.FC = () => {
              {/* Passage Card 3 */}
              <div className="flex flex-col bg-white rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-all">
                 <p className="text-sm font-medium text-gray-500 mb-1">TPO 51, Passage 1</p>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">The Surface of Mars</h3>
-                <p className="text-sm text-gray-500 line-clamp-2 mb-4">Explores the geological features of Mars, including its volcanoes, canyons, and evidence of past water activity.</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Ancient Egyptian Art</h3>
+                <p className="text-sm text-gray-500 line-clamp-2 mb-4">Explore the conventions and religious significance of art in ancient Egypt.</p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                   <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Astronomy</span>
-                   <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Geology</span>
+                   <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">Art History</span>
+                   <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">History</span>
                 </div>
-                <button className="mt-auto w-full py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors">
+                <button 
+                  onClick={() => window.location.href = RoutePath.READING_PRACTICE}
+                  className="mt-auto w-full py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors">
                   Start Practice
                 </button>
              </div>
           </div>
-        </div>
-
-        {/* Pagination */}
-        <div className="flex justify-center mt-8 gap-2">
-           <button className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><span className="material-symbols-outlined">chevron_left</span></button>
-           <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-primary text-white text-sm font-bold">1</button>
-           <button className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-medium">2</button>
-           <button className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><span className="material-symbols-outlined">chevron_right</span></button>
         </div>
       </div>
     </Layout>
   );
 };
 
-export default ReadingLibraryScreen;
+window.ReadingLibraryScreen = ReadingLibraryScreen;

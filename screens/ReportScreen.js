@@ -1,16 +1,13 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { RoutePath } from '../types';
+const ReportScreen = () => {
+  const Layout = window.Layout;
+  const RoutePath = window.RoutePath;
 
-const ReportScreen: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <Layout>
       <div className="flex flex-col gap-6 max-w-6xl mx-auto">
          <div className="flex flex-col gap-2">
-            <button onClick={() => navigate(RoutePath.HISTORY)} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary w-fit">
+            <button onClick={() => window.location.href = RoutePath.HISTORY} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary w-fit">
                <span className="material-symbols-outlined text-base">arrow_back</span> Back to Practice History
             </button>
             <h1 className="text-3xl font-black text-gray-900">TPO 54 - Reading Section 1 Report</h1>
@@ -100,28 +97,12 @@ const ReportScreen: React.FC = () => {
                      <span className="material-symbols-outlined fill-icon">cancel</span> Incorrect
                   </div>
                </div>
-               
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                  <div className="flex gap-2 items-center">
-                     <span className="font-medium text-gray-500 min-w-[100px]">Correct Answer:</span>
-                     <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">C. short-lived</span>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                     <span className="font-medium text-gray-500 min-w-[100px]">Your Answer:</span>
-                     <span className="bg-red-100 text-red-800 px-2 py-0.5 rounded font-semibold line-through">B. beautiful</span>
-                  </div>
-               </div>
-
-               <div className="border-t border-gray-100 pt-4">
-                  <h4 className="font-bold text-gray-900 text-sm mb-2">Analysis:</h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">The context of the sentence "the insect's ephemeral life" suggests a short duration. "Ephemeral" is a vocabulary word meaning lasting for a very short time. It is recommended to strengthen your vocabulary.</p>
-               </div>
+               {/* Content for Question 2 would go here */}
             </div>
-
          </div>
       </div>
     </Layout>
   );
 };
 
-export default ReportScreen;
+window.ReportScreen = ReportScreen;

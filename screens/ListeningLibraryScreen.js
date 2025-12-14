@@ -1,10 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { RoutePath } from '../types';
+const ListeningLibraryScreen = () => {
+  console.log('window.React in ListeningLibraryScreen:', window.React);
 
-const ListeningLibraryScreen: React.FC = () => {
-  const navigate = useNavigate();
+  const Layout = window.Layout;
+  const RoutePath = window.RoutePath;
+
 
   return (
     <Layout>
@@ -49,7 +48,7 @@ const ListeningLibraryScreen: React.FC = () => {
                  </div>
               </div>
               <button 
-                 onClick={() => navigate(RoutePath.LISTENING_PRACTICE)}
+                 onClick={() => window.location.href = RoutePath.LISTENING_PRACTICE}
                  className="w-full py-3 bg-primary/5 text-primary text-sm font-bold hover:bg-primary/10 transition-colors border-t border-gray-100">
                  Practice Again
               </button>
@@ -100,9 +99,6 @@ const ListeningLibraryScreen: React.FC = () => {
               <button className="w-9 h-9 rounded-lg bg-primary text-white font-bold text-sm">1</button>
               <button className="w-9 h-9 rounded-lg text-gray-600 hover:bg-gray-50 font-medium text-sm">2</button>
               <button className="w-9 h-9 rounded-lg text-gray-600 hover:bg-gray-50 font-medium text-sm">3</button>
-              <span className="flex items-end px-1 text-gray-400">...</span>
-              <button className="w-9 h-9 rounded-lg text-gray-600 hover:bg-gray-50 font-medium text-sm">8</button>
-              <button className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><span className="material-symbols-outlined text-lg">chevron_right</span></button>
            </nav>
         </div>
       </div>
@@ -110,4 +106,4 @@ const ListeningLibraryScreen: React.FC = () => {
   );
 };
 
-export default ListeningLibraryScreen;
+window.ListeningLibraryScreen = ListeningLibraryScreen;

@@ -1,11 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { MOCK_USER } from '../constants';
-import { RoutePath } from '../types';
-
-const DashboardScreen: React.FC = () => {
-  const navigate = useNavigate();
+const DashboardScreen = () => {
+  const Layout = window.Layout;
+  const MOCK_USER = window.MOCK_USER;
+  const RoutePath = window.RoutePath;
 
   return (
     <Layout>
@@ -14,7 +10,7 @@ const DashboardScreen: React.FC = () => {
       {/* Quick Start Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
         <div 
-          onClick={() => navigate(RoutePath.READING_LIB)}
+          onClick={() => window.location.href = RoutePath.READING_LIB}
           className="group cursor-pointer bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all hover:-translate-y-1"
         >
           <div 
@@ -26,7 +22,7 @@ const DashboardScreen: React.FC = () => {
         </div>
 
         <div 
-           onClick={() => navigate(RoutePath.LISTENING_LIB)}
+           onClick={() => window.location.href = RoutePath.LISTENING_LIB}
            className="group cursor-pointer bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all hover:-translate-y-1"
         >
           <div 
@@ -38,7 +34,7 @@ const DashboardScreen: React.FC = () => {
         </div>
 
         <div 
-           onClick={() => navigate(RoutePath.HISTORY)}
+           onClick={() => window.location.href = RoutePath.HISTORY}
            className="group cursor-pointer bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all hover:-translate-y-1"
         >
           <div 
@@ -74,4 +70,4 @@ const DashboardScreen: React.FC = () => {
   );
 };
 
-export default DashboardScreen;
+window.DashboardScreen = DashboardScreen;

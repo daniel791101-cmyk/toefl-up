@@ -3,12 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOEFL Prep Simulation</title>
+    <title>TOEFL Prep - Practice History</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
     <!-- React & ReactDOM (UMD) -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Recharts Dependencies -->
+    <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
     
     <!-- Babel Standalone -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -60,9 +64,10 @@
     <div id="root"></div>
 
     <!-- App Scripts (Order Matters) -->
-    <script type="text/babel" src="./types.js"></script>
-    <script type="text/babel" src="./screens/LoginScreen.js"></script>
-    <script type="text/babel" src="./App.js"></script>
-    <script type="text/babel" src="./index.js"></script>
+    <script type="text/babel" src="../types.js"></script>
+    <script type="text/babel" src="../constants.js"></script>
+    <script type="text/babel" src="../components/Layout.js"></script>
+    <script type="text/babel" src="../screens/HistoryScreen.js"></script>
+    <script type="text/babel" src="./main.js"></script>
   </body>
 </html>

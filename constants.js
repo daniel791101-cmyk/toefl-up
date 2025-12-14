@@ -1,20 +1,18 @@
-import React from 'react';
-import { PracticeSession, Question, Passage } from './types';
 
-export const MOCK_USER = {
+window.MOCK_USER = {
   name: 'John Doe',
   email: 'john.doe@email.com',
   avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFgGsKMgMsoJjKxI0GqxLArhwhRShqTscOycT3OFe8TGjVLHfZqyG9GYz7PGkLDdVkBp-42-JVLLW9_aMdx5ZI1qRuJiyvmPyKoBQfyEOyXowT1px7dyVY2KL9RIcYFHUrhBHwE0gwXaJvX9FnVA1wYvnGvrVNG9LfeIJ9XOBAERTcEpHzRJvT9CEosop1H8fX47NaO_5cQ0F22hLCekcd12eEL9sqt9JAdr6H_iLu7V2Cs3AkBHNAa6YsdpfMU38zI_Td7OP7tew'
 };
 
-export const RECENT_PRACTICES: PracticeSession[] = [
+window.RECENT_PRACTICES = [
   { id: '1', title: 'TPO 54 - Integrated Writing', date: 'October 26, 2023', type: 'Writing', score: '90%', accuracy: 90, timeSpent: '20m', completed: true },
   { id: '2', title: 'TPO 54 - Reading Section 1', date: 'October 24, 2023', type: 'Reading', score: '75%', accuracy: 75, timeSpent: '18m', completed: true },
   { id: '3', title: 'TPO 53 - Listening Section 2', date: 'October 22, 2023', type: 'Listening', score: '95%', accuracy: 95, timeSpent: '15m', completed: true },
   { id: '4', title: 'TPO 52 - Speaking Task 1', date: 'October 20, 2023', type: 'Speaking', score: 'Good', timeSpent: '5m', completed: true },
 ];
 
-export const READING_PASSAGE: Passage = {
+window.READING_PASSAGE = {
   id: 'tpo54-1',
   title: 'The Geology of the Grand Canyon',
   topic: 'Geology',
@@ -25,7 +23,7 @@ export const READING_PASSAGE: Passage = {
   ]
 };
 
-export const READING_QUESTIONS: Question[] = [
+window.READING_QUESTIONS = [
   {
     id: 'q1',
     text: 'According to paragraph 2, what was the primary force that created the Grand Canyon?',
@@ -40,7 +38,7 @@ export const READING_QUESTIONS: Question[] = [
   }
 ];
 
-export const LISTENING_QUESTIONS: Question[] = [
+window.LISTENING_QUESTIONS = [
   {
     id: 'l1',
     text: 'Why does the student go to see the professor?',
@@ -51,18 +49,18 @@ export const LISTENING_QUESTIONS: Question[] = [
       'To get advice about graduate school.'
     ],
     correctAnswerIndex: 1,
-    explanation: 'The correct answer is B because the student explicitly states, "I was a bit confused about the \'observer effect\' you mentioned in yesterday\'s lecture."'
+    explanation: 'The student mentions early in the conversation that she wants to make sure she understands the difference between two concepts discussed in the last lecture.'
   },
   {
     id: 'l2',
-    text: 'What is the professor\'s main point about the "observer effect"?',
+    text: 'What does the professor imply about the student\'s paper?',
     options: [
-      'It only applies to experiments in physics.',
-      'It can be avoided with careful planning.',
-      'The act of observation can alter the behavior being studied.',
-      'It makes social science research unreliable.'
+      'It was well-written but lacked depth.',
+      'It was one of the best papers in the class.',
+      'It showed a good understanding of the topic.',
+      'It needed more research to support the arguments.'
     ],
     correctAnswerIndex: 2,
-    explanation: 'The professor explains that in social sciences, "when people know they\'re being watched, they might act differently."'
+    explanation: 'The professor compliments the student on her grasp of the complex theories presented in her paper.'
   }
 ];

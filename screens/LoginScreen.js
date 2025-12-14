@@ -1,13 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { RoutePath } from '../types';
+const LoginScreen = () => {
+  const RoutePath = window.RoutePath;
 
-const LoginScreen: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    navigate(RoutePath.DASHBOARD);
+    window.location.href = RoutePath.DASHBOARD;
   };
 
   return (
@@ -96,4 +92,4 @@ const LoginScreen: React.FC = () => {
   );
 };
 
-export default LoginScreen;
+window.LoginScreen = LoginScreen;

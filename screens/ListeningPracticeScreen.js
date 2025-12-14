@@ -1,11 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { LISTENING_QUESTIONS } from '../constants';
-import { RoutePath } from '../types';
+const ListeningPracticeScreen = () => {
+  const Layout = window.Layout;
+  const LISTENING_QUESTIONS = window.LISTENING_QUESTIONS;
+  const RoutePath = window.RoutePath;
 
-const ListeningPracticeScreen: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <Layout>
@@ -99,52 +96,23 @@ const ListeningPracticeScreen: React.FC = () => {
 
                     return (
                         <label key={idx} className={`flex items-start gap-3 p-3 rounded-lg border transition-all ${style}`}>
-                        <input 
-                           type="radio" 
-                           checked={idx === 0} 
-                           readOnly 
-                           className={`mt-0.5 focus:ring-primary ${idx === 0 ? 'text-danger' : idx === 2 ? 'text-success' : 'text-primary'}`} 
-                        />
-                        <span className={`text-sm ${idx === 2 ? "font-semibold text-gray-900" : "text-gray-600"}`}>{opt}</span>
+                           <input type="radio" checked={idx === 0} readOnly className="mt-0.5 text-primary focus:ring-primary" />
+                           <span className="text-sm text-gray-600">{opt}</span>
+                           {idx === 2 && <span className="ml-auto text-xs font-bold text-success flex items-center gap-1"><span className="material-symbols-outlined text-sm">check</span> Correct Answer</span>}
+                           {idx === 0 && <span className="ml-auto text-xs font-bold text-danger flex items-center gap-1"><span className="material-symbols-outlined text-sm">close</span> Your Answer</span>}
                         </label>
-                    )
+                    );
                  })}
-              </div>
-              <div className="mt-4 bg-white/60 p-3 rounded-lg border border-danger/10">
-                 <p className="text-sm font-bold text-gray-900">Explanation:</p>
-                 <p className="text-sm text-gray-600 mt-1">{LISTENING_QUESTIONS[1].explanation}</p>
-              </div>
-           </div>
-           
-           {/* Question 3 - Unanswered State */}
-           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-              <h3 className="font-medium text-gray-900 mb-4"><span className="font-bold">3.</span> What will the student likely do next?</h3>
-              <div className="space-y-3 pl-4">
-                 {[
-                    "Change the topic of his research paper.",
-                    "Incorporate the observer effect into his paper.",
-                    "Drop the professor's class.",
-                    "Conduct an experiment of his own."
-                 ].map((opt, idx) => (
-                    <label key={idx} className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-primary/50 cursor-pointer hover:bg-gray-50 transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                       <input type="radio" name="q3" className="mt-0.5 text-primary focus:ring-primary" />
-                       <span className="text-sm text-gray-600">{opt}</span>
-                    </label>
-                 ))}
               </div>
            </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex justify-end gap-4 py-6 border-t border-gray-200">
-           <button className="px-6 py-2.5 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-sm">
-              Submit Answers
-           </button>
-           <button 
-              onClick={() => navigate(RoutePath.REPORT)}
-              className="px-6 py-2.5 bg-gray-100 text-gray-900 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2">
-              Next <span className="material-symbols-outlined">arrow_forward</span>
-           </button>
+        <div className="flex justify-end pt-4 border-t border-gray-200">
+          <button 
+            onClick={() => window.location.href = RoutePath.REPORT}
+            className="px-6 py-2.5 bg-gray-100 text-gray-900 font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2">
+            Next <span className="material-symbols-outlined">arrow_forward</span>
+          </button>
         </div>
 
       </div>
@@ -152,4 +120,4 @@ const ListeningPracticeScreen: React.FC = () => {
   );
 };
 
-export default ListeningPracticeScreen;
+window.ListeningPracticeScreen = ListeningPracticeScreen;
