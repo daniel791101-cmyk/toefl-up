@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOEFL Prep - Listening</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- React & ReactDOM (UMD) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="../bootstrapScreen.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .material-symbols-outlined.fill-icon {
+        font-variation-settings: 'FILL' 1;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Lexend', sans-serif;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "primary-dark": "#0f6bc6",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "surface-light": "#ffffff",
+              "surface-dark": "#182431",
+              "text-light": "#0d141b",
+              "text-secondary": "#4c739a",
+              "success": "#28a745",
+              "danger": "#dc3545",
+              "warning": "#ffc107"
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"],
+              "body": ["Inter", "sans-serif"]
+            },
+          },
+        },
+      }
+    </script>
+  </head>
+  <body class="bg-background-light text-text-light antialiased">
+    <div id="root"></div>
+
+    <!-- App Scripts (Order Matters) -->
+    <script src="../types.js"></script>
+    <script src="../constants.js"></script>
+    <script type="text/babel" data-presets="react" src="../components/Layout.js"></script>
+    <script type="text/babel" data-presets="react" src="../screens/ListeningLibraryScreen.js"></script>
+    <script type="text/babel" data-presets="react" src="./main.js"></script>
+  </body>
+</html>
