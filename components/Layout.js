@@ -3,6 +3,8 @@ const Layout = ({ children }) => {
   const location = window.location;
   const RoutePath = window.RoutePath;
   const MOCK_USER = window.MOCK_USER;
+  const Auth = window.Auth;
+  const user = (Auth && Auth.getCurrentUser && Auth.getCurrentUser()) || MOCK_USER;
 
   const menuItems = [
     { label: 'Dashboard', icon: 'home', path: RoutePath.DASHBOARD },
@@ -10,7 +12,11 @@ const Layout = ({ children }) => {
     { label: 'Listening', icon: 'headphones', path: RoutePath.LISTENING_LIB },
     { label: 'Practice History', icon: 'history', path: RoutePath.HISTORY },
     { label: 'Report', icon: 'analytics', path: RoutePath.REPORT },
+    { label: 'Profile', icon: 'person', path: RoutePath.PROFILE },
   ];
+
+  const displayName = user.username || user.name || 'User';
+  const displayAvatar = user.avatar_url || user.avatar || MOCK_USER.avatar;
 
   return (
     <div className="flex h-screen w-full bg-background-light overflow-hidden">
@@ -23,7 +29,7 @@ const Layout = ({ children }) => {
         
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
-            const isActive = location.pathname.startsWith(item.path);
+            const isActive = location.pathname === item.path || location.pathname.startsWith(item.path);
             return (
               <button
                 key={item.path}
@@ -45,7 +51,7 @@ const Layout = ({ children }) => {
 
         <div className="p-4 border-t border-gray-200">
           <button 
-             onClick={() => window.location.href = RoutePath.LOGIN}
+             onClick={() => { if (Auth && Auth.signOut) Auth.signOut(); window.location.href = RoutePath.LOGIN; }}
              className="flex w-full items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900">
             <span className="material-symbols-outlined">logout</span>
             Sign Out
@@ -66,12 +72,15 @@ const Layout = ({ children }) => {
             <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
                <span className="material-symbols-outlined">notifications</span>
             </button>
-            <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+            <div 
+                className="flex items-center gap-3 pl-4 border-l border-gray-200 cursor-pointer hover:bg-gray-50 p-1 rounded-lg"
+                onClick={() => window.location.href = RoutePath.PROFILE}
+            >
                <div className="text-right hidden sm:block">
-                 <p className="text-sm font-medium text-gray-900">{MOCK_USER.name}</p>
+                 <p className="text-sm font-medium text-gray-900">{displayName}</p>
                  <p className="text-xs text-gray-500">Learner</p>
                </div>
-               <img src={MOCK_USER.avatar} alt="User" className="w-9 h-9 rounded-full bg-gray-200 object-cover" />
+               <img src={displayAvatar} alt="User" className="w-9 h-9 rounded-full bg-gray-200 object-cover" />
             </div>
           </div>
         </header>

@@ -1,9 +1,48 @@
 const LoginScreen = () => {
+  const { useState, useEffect } = window.React;
   const RoutePath = window.RoutePath;
+  const Auth = window.Auth;
 
-  const handleLogin = (e) => {
+  const [tab, setTab] = useState('login');
+  const [username, setUsername] = useState('student');
+  const [email, setEmail] = useState('student@example.com');
+  const [password, setPassword] = useState('password123');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (Auth && Auth.isAuthenticated()) {
+      window.location.href = RoutePath.DASHBOARD;
+    }
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    window.location.href = RoutePath.DASHBOARD;
+    setError('');
+    setLoading(true);
+    try {
+      await Auth.signIn({ username, password });
+      window.location.href = RoutePath.DASHBOARD;
+    } catch (err) {
+      setError(err.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      await Auth.signUp({ username, email, password });
+      window.location.href = RoutePath.DASHBOARD;
+    } catch (err) {
+      setError(err.message || 'Sign up failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -17,54 +56,87 @@ const LoginScreen = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-8">
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-              <p className="text-gray-500 mt-2">Login to continue your journey.</p>
+              <h1 className="text-2xl font-bold text-gray-900">{tab === 'login' ? 'Welcome Back' : 'Create Your Account'}</h1>
+              <p className="text-gray-500 mt-2">{tab === 'login' ? 'Login to continue your journey.' : 'Sign up to start practicing.'}</p>
             </div>
 
             <div className="flex mb-6 bg-gray-100 p-1 rounded-lg">
-              <button className="flex-1 py-1.5 text-sm font-medium rounded-md bg-white text-primary shadow-sm transition-all">
+              <button
+                onClick={() => setTab('login')}
+                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${tab === 'login' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
                 Login
               </button>
-              <button className="flex-1 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-all">
+              <button
+                onClick={() => setTab('signup')}
+                className={`flex-1 py-1.5 text-sm font-medium transition-all ${tab === 'signup' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
                 Sign Up
               </button>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            {error && <div className="mb-4 p-3 bg-red-50 text-sm text-red-600 rounded-lg border border-red-100">{error}</div>}
+
+            <form onSubmit={tab === 'login' ? handleLogin : handleSignUp} className="space-y-4">
               <label className="block">
-                <span className="text-sm font-medium text-gray-700 mb-1 block">Username/Email</span>
-                <input 
-                  type="text" 
+                <span className="text-sm font-medium text-gray-700 mb-1 block">Username</span>
+                <input
+                  type="text"
+                  required
                   className="w-full h-12 px-3 rounded-lg border-gray-300 focus:border-primary focus:ring-primary/50 text-sm"
-                  placeholder="Enter username or email"
-                  defaultValue="student@example.com"
+                  placeholder="Enter username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </label>
+
+              {tab === 'signup' && (
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700 mb-1 block">Email</span>
+                  <input
+                    type="email"
+                    required
+                    className="w-full h-12 px-3 rounded-lg border-gray-300 focus:border-primary focus:ring-primary/50 text-sm"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </label>
+              )}
               
               <label className="block">
                 <span className="text-sm font-medium text-gray-700 mb-1 block">Password</span>
                 <div className="relative">
-                  <input 
-                    type="password" 
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
                     className="w-full h-12 px-3 pr-10 rounded-lg border-gray-300 focus:border-primary focus:ring-primary/50 text-sm"
                     placeholder="Enter password"
-                    defaultValue="password123"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
-                  <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                    <span className="material-symbols-outlined text-xl">visibility</span>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
                   </button>
                 </div>
               </label>
 
-              <div className="flex justify-end">
-                <a href="#" className="text-sm font-medium text-primary hover:underline">Forgot password?</a>
-              </div>
+              {tab === 'login' && (
+                <div className="flex justify-end">
+                  <a href="#" className="text-sm font-medium text-primary hover:underline">Forgot password?</a>
+                </div>
+              )}
 
               <button 
                 type="submit"
-                className="w-full h-12 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+                disabled={loading}
+                className={`w-full h-12 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                Login
+                {loading ? 'Processing...' : (tab === 'login' ? 'Login' : 'Create Account')}
               </button>
             </form>
 
@@ -83,7 +155,17 @@ const LoginScreen = () => {
             </div>
             
             <p className="mt-8 text-center text-sm text-gray-500">
-              Don't have an account? <a href="#" className="font-medium text-primary hover:underline">Sign up now</a>
+              {tab === 'login' ? (
+                <>
+                  Don't have an account?{' '}
+                  <button onClick={() => setTab('signup')} className="font-medium text-primary hover:underline">Sign up now</button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{' '}
+                  <button onClick={() => setTab('login')} className="font-medium text-primary hover:underline">Login</button>
+                </>
+              )}
             </p>
           </div>
         </div>

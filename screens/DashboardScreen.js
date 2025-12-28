@@ -1,11 +1,13 @@
 const DashboardScreen = () => {
   const Layout = window.Layout;
   const MOCK_USER = window.MOCK_USER;
+  const Auth = window.Auth;
+  const user = (Auth && Auth.getCurrentUser && Auth.getCurrentUser()) || MOCK_USER;
   const RoutePath = window.RoutePath;
 
   return (
     <Layout>
-      <h1 className="text-3xl font-black text-gray-900 mb-8">Welcome back, {MOCK_USER.name}!</h1>
+      <h1 className="text-3xl font-black text-gray-900 mb-8">Welcome back, {user.name}!</h1>
 
       {/* Quick Start Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
