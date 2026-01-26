@@ -1,13 +1,120 @@
 const DashboardScreen = () => {
+  const { useState } = window.React;
   const Layout = window.Layout;
-  const MOCK_USER = window.MOCK_USER;
   const Auth = window.Auth;
-  const user = (Auth && Auth.getCurrentUser && Auth.getCurrentUser()) || MOCK_USER;
+  const user = (Auth && Auth.getCurrentUser && Auth.getCurrentUser());
   const RoutePath = window.RoutePath;
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
+  const [practiceType, setPracticeType] = useState('reading');
+  const [topic, setTopic] = useState('science');
+  const [subtype, setSubtype] = useState('lecture');
+
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    try {
+      const data = await window.fetchWithAuth('/generate-practice', {
+        method: 'POST',
+        body: JSON.stringify({
+          type: practiceType,
+          topic,
+          subtype: practiceType === 'listening' ? subtype : null
+        })
+      });
+      
+      // Store the generated practice in sessionStorage to pass it to the practice screen
+      sessionStorage.setItem('current_ai_practice', JSON.stringify(data));
+      
+      // Redirect based on type
+      if (practiceType === 'reading') {
+        window.location.href = RoutePath.READING_PRACTICE + '?source=ai';
+      } else {
+        window.location.href = RoutePath.LISTENING_PRACTICE + '?source=ai';
+      }
+    } catch (error) {
+      alert('Failed to generate practice: ' + error.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  if (!user) {
+    window.location.href = RoutePath.LOGIN;
+    return null;
+  }
 
   return (
     <Layout>
-      <h1 className="text-3xl font-black text-gray-900 mb-8">Welcome back, {user.name}!</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-black text-gray-900">Welcome back, {user.username}!</h1>
+        <button 
+          onClick={() => setShowAIPanel(!showAIPanel)}
+          className="px-6 py-2 bg-black text-white rounded-lg font-bold hover:bg-gray-800 transition-colors flex items-center gap-2"
+        >
+          <span className="text-lg">✨</span> Generate AI Practice
+        </button>
+      </div>
+
+      {showAIPanel && (
+        <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl border-2 border-dashed border-gray-300 p-6 mb-12 animate-in fade-in slide-in-from-top-4">
+          <h2 className="text-xl font-bold mb-4">Generate Custom Practice Set</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Practice Type</label>
+              <select 
+                value={practiceType} 
+                onChange={(e) => setPracticeType(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+              >
+                <option value="reading">Reading</option>
+                <option value="listening">Listening</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Topic</label>
+              <select 
+                value={topic} 
+                onChange={(e) => setTopic(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+              >
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="art">Art</option>
+                <option value="social_science">Social Science</option>
+                <option value="business">Business</option>
+              </select>
+            </div>
+            {practiceType === 'listening' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Listening Type</label>
+                <select 
+                  value={subtype} 
+                  onChange={(e) => setSubtype(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+                >
+                  <option value="lecture">Lecture</option>
+                  <option value="conversation">Conversation</option>
+                </select>
+              </div>
+            )}
+            <div className={practiceType === 'reading' ? 'md:col-span-2' : ''}>
+              <button 
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="w-full py-2 bg-primary text-white rounded-md font-bold hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isGenerating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Generating...
+                  </>
+                ) : 'Generate Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Start Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">

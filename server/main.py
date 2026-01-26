@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import List
 
-import models, schemas, auth, database
+import models, schemas, auth, database, ai_generator
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -28,29 +28,37 @@ async def log_requests(request, call_next):
 
 @app.post("/signup", response_model=schemas.User)
 def signup(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
+    print(f"DEBUG: Signing up user: {user.username}")
     db_user = db.query(models.User).filter(models.User.username == user.username).first()
     if db_user:
+        print(f"DEBUG: Username already registered: {user.username}")
         raise HTTPException(status_code=400, detail="Username already registered")
     db_email = db.query(models.User).filter(models.User.email == user.email).first()
     if db_email:
+        print(f"DEBUG: Email already registered: {user.email}")
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    hashed_password = auth.get_password_hash(user.password)
-    db_user = models.User(
-        username=user.username,
-        email=user.email,
-        hashed_password=hashed_password,
-        avatar_url=user.avatar_url
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    try:
+        hashed_password = auth.get_password_hash(user.password)
+        db_user = models.User(
+            username=user.username,
+            email=user.email,
+            hashed_password=hashed_password,
+            avatar_url=user.avatar_url
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        print(f"DEBUG: Signup successful for user: {user.username}")
+        return db_user
+    except Exception as e:
+        print(f"DEBUG: Signup error for user {user.username}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
-    user = db.query(models.User).filter(models.User.username == form_data.username).first()
-    if not user or not auth.verify_password(form_data.password, user.hashed_password):
+    user = auth.authenticate_user(db, form_data.username, form_data.password)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -90,6 +98,19 @@ async def update_password(password_update: schemas.PasswordUpdate, current_user:
     current_user.hashed_password = auth.get_password_hash(password_update.new_password)
     db.commit()
     return {"message": "Password updated successfully"}
+
+@app.post("/generate-practice")
+async def generate_practice(request: schemas.PracticeRequest, current_user: models.User = Depends(auth.get_current_user)):
+    try:
+        content = ai_generator.generate_toefl_content(
+            type=request.type,
+            topic=request.topic,
+            subtype=request.subtype
+        )
+        return content
+    except Exception as e:
+        print(f"Error generating practice: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

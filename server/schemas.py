@@ -29,3 +29,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class PracticeRequest(BaseModel):
+    type: str # reading or listening
+    topic: str # history, science, etc.
+    subtype: Optional[str] = None # lecture or conversation

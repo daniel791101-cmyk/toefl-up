@@ -12,20 +12,20 @@ SECRET_KEY = "your-secret-key-here" # In production, use an environment variable
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 import hashlib
 
 def verify_password(plain_password, hashed_password):
-    # Truncate and encode to bytes for consistent bcrypt handling
-    pw_bytes = plain_password[:72].encode('utf-8')
-    return pwd_context.verify(pw_bytes, hashed_password)
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        print(f"DEBUG: Password verification error: {str(e)}")
+        return False
 
 def get_password_hash(password):
-    # Truncate and encode to bytes for consistent bcrypt handling
-    pw_bytes = password[:72].encode('utf-8')
-    return pwd_context.hash(pw_bytes)
+    return pwd_context.hash(password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -36,6 +36,18 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def authenticate_user(db: Session, username: str, password: str):
+    print(f"DEBUG: Authenticating user: {username}")
+    user = db.query(models.User).filter(models.User.username == username).first()
+    if not user:
+        print(f"DEBUG: User not found: {username}")
+        return False
+    if not verify_password(password, user.hashed_password):
+        print(f"DEBUG: Password mismatch for user: {username}")
+        return False
+    print(f"DEBUG: Authentication successful for user: {username}")
+    return user
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(
