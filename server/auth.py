@@ -1,31 +1,37 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+
+import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-import database, models
+
+import database
+import models
 
 # Secret key to sign JWT tokens
-SECRET_KEY = "your-secret-key-here" # In production, use an environment variable
+SECRET_KEY = "your-secret-key-here"  # In production, use an environment variable
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+MAX_BCRYPT_BYTES = 72
 
-import hashlib
 
-def verify_password(plain_password, hashed_password):
-    # Truncate and encode to bytes for consistent bcrypt handling
-    pw_bytes = plain_password[:72].encode('utf-8')
-    return pwd_context.verify(pw_bytes, hashed_password)
+def _normalize_password(password: str) -> bytes:
+    return password.encode("utf-8")[:MAX_BCRYPT_BYTES]
 
-def get_password_hash(password):
-    # Truncate and encode to bytes for consistent bcrypt handling
-    pw_bytes = password[:72].encode('utf-8')
-    return pwd_context.hash(pw_bytes)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    pw_bytes = _normalize_password(plain_password)
+    return bcrypt.checkpw(pw_bytes, hashed_password.encode("utf-8"))
+
+
+def get_password_hash(password: str) -> str:
+    pw_bytes = _normalize_password(password)
+    hashed = bcrypt.hashpw(pw_bytes, bcrypt.gensalt())
+    return hashed.decode("utf-8")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()

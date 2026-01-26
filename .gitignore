@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+/server/.venv/
+/server/__pycache__/
+/server/*.db
+/server/.python-version
+/server/uv.lock
 
 # Editor directories and files
 .vscode/*
